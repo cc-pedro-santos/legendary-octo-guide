@@ -5,13 +5,13 @@ namespace CCTest.Actions;
 
 public static class UI
 {
-	public const string LoadTexasWellsOP = "Load Texas Wells";
-	public const string LoadTexasLovingWellsOP = "Load Texas Loving Wells";
+	public const string LoadTexasWellsOP = "Load Permian and Horizontal Wells";
+	public const string LoadTexasLovingWellsOP = "Load Texas Loving County Wells";
 	public const string DeleteWellsOP = "Delete Wells From File";
-    public const string DeleteTexasWellsOP = "Delete Texas Wells";
-    public const string DeleteTexasLovingWellsOP = "Delete Texas Loving Wells";
-    public const string UpdateTexasWellsOP = "Update Texas Wells";
-    public const string UpdateTexasLovingWellsOP = "Update Texas Loving Wells";
+    public const string DeleteTexasWellsOP = "Delete Permian and Horizontal Wells";
+    public const string DeleteTexasLovingWellsOP = "Delete Texas Loving County Wells";
+    public const string UpdateTexasWellsOP = "Update Permian and Horizontal Wells";
+    public const string UpdateTexasLovingWellsOP = "Update Texas Loving County Wells";
     public const string ExitOP = "[red]Exit[/]";
 
 	private static ProgressContext Progress { get; set; }
@@ -40,7 +40,7 @@ public static class UI
 
 	private static async Task<(string, bool)> AskAboutProject(CancellationToken token)
 	{
-		if (AnsiConsole.Ask<bool>("Do you want to [green]create a new project[/]?"))
+		if (AnsiConsole.Ask<bool>("Do you want to [green]create a new project[/] [gray](true or false)[/]?"))
 		{
 			var name = AnsiConsole.Ask<string>("What's the [green]project name[/]?");
 			var response = await Api.CreateProject(name, token);

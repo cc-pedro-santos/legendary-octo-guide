@@ -6,7 +6,7 @@ using Spectre.Console;
 static void LoadConfig()
 {
 	var filePath = AnsiConsole.Ask<string>("Where's your [green]config file[/]?");
-	var file = Path.Combine(filePath, "config.json");
+	var file = filePath.Contains("config.json") ? filePath : Path.Combine(filePath, "config.json");
 
 	var content = File.ReadAllText(file);
 	MyAppContext.Config = JsonConvert.DeserializeObject<MyAppContext.Configuration>(content);
