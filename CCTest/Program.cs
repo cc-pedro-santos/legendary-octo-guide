@@ -26,7 +26,7 @@ do
 			await UI.LoadTexasWellsAsync();
 			break;
 		case UI.LoadTexasLovingWellsOP:
-			await UI.LoadTexasWellsAsync();
+			await UI.LoadTexasLovingWellsAsync();
 			break;
         case UI.DeleteWellsOP:
             await UI.DeleteWellsFromFile();
