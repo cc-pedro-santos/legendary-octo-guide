@@ -53,7 +53,7 @@ public class DeleteFromSQL
         // Wells
         var getWellSql = WellBlocks.GetWellsBlock(wellTable, PageSize, MaxDegreeOfParallelism, token);
         var getWellID = WellBlocks.GetIdWellBlock(MaxDegreeOfParallelism, projectID, token);
-        var deleteWell = WellBlocks.DeleteWellsBlock(MaxDegreeOfParallelism, token);
+        var deleteWell = WellBlocks.DeleteWellsBlock(projectID, MaxDegreeOfParallelism, token);
 
         var transformWell = new TransformBlock<IEnumerable<SqlWell>, IEnumerable<WellID>>(
             c => c.Select(s => new WellID(s.ChosenID, string.Empty)),

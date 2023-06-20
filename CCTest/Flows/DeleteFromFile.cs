@@ -53,7 +53,7 @@ public class DeleteFromFile
 
 		var getId = WellBlocks.GetIdWellBlock(MaxDegreeOfParallelism, projectID, token);
 		var deleteProds = ProductionBlocks.DeleteProductionsBlock(token, MaxDegreeOfParallelism);
-		var deleteWells = WellBlocks.DeleteWellsBlock(1, token);
+		var deleteWells = WellBlocks.DeleteWellsBlock(projectID, 1, token);
 
 		// Batch
 		var batchDelete = new BatchBlock<WellID>(100, 

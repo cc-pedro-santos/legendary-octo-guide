@@ -93,10 +93,13 @@ public static class Api
 		await RetryPolicy.ExecuteAsync(() => client.DeleteMonthlyProductionsAsync(wellID, token));
     }
 
-	public static async Task DeleteWellsAsync(string[] wellIDs, CancellationToken token)
+	public static async Task DeleteWellsAsync(string projectID, string[] wellIDs, CancellationToken token)
 	{
 		var client = GetClient();
-		await RetryPolicy.ExecuteAsync(() => client.DeleteWellsAsync(id: wellIDs, cancellationToken: token));
+		if (string.IsNullOrEmpty(projectID))
+			 await RetryPolicy.ExecuteAsync(() => client.DeleteWellsAsync(id: wellIDs, cancellationToken: token));
+		else await RetryPolicy.ExecuteAsync(() => client.DeleteProjectWellsAsync(projectID, id: wellIDs, cancellationToken: token));
+
     }
 
     public static async Task<IEnumerable<WellID>> GetWellIDs(string[] wellChosenIDS, string projectID, CancellationToken token)

@@ -72,13 +72,13 @@ public static class WellBlocks
 		});
 
 	public static TransformBlock<IEnumerable<WellID>, IEnumerable<WellID>> DeleteWellsBlock(
-		int maxDegreeOfParallelism, CancellationToken token)
+		string projectID, int maxDegreeOfParallelism, CancellationToken token)
 		=> new (async wellIDs =>
 		{
 			try
 			{
 				if (wellIDs.Any())
-					await Api.DeleteWellsAsync(wellIDs.Select(s => s.wellID).ToArray(), token);
+					await Api.DeleteWellsAsync(projectID, wellIDs.Select(s => s.wellID).ToArray(), token);
             }
 			catch (Exception ex)
 			{
