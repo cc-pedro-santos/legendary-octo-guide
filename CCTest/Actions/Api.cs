@@ -1,6 +1,7 @@
 ﻿using CCTest.Models;
 using ComboCurve.Api.Api;
 using ComboCurve.Api.Auth;
+using ComboCurve.Api.Client;
 using ComboCurve.Api.Model;
 using Polly;
 
@@ -87,10 +88,17 @@ public static class Api
 		return await RetryPolicy.ExecuteAsync(() => client.PostProjectsAsync(new List<ProjectInput> { project }, token));
 	}
 
-	public static async Task DeleteProductionAsync(string wellID, CancellationToken token)
+	public static async Task DeleteProductionAsync(string projectID, string wellID, CancellationToken token)
 	{
-		var client = GetClient();
-		await RetryPolicy.ExecuteAsync(() => client.DeleteMonthlyProductionsAsync(wellID, token));
+		if (string.IsNullOrEmpty(projectID))
+		{
+			var client = GetClient();
+			await RetryPolicy.ExecuteAsync(() => client.DeleteMonthlyProductionsAsync(wellID, token));
+		}
+		else
+		{
+			await RetryPolicy.ExecuteAsync(() => DeleteProjectsMonthlyProductions(projectID, wellID, token));
+		}
     }
 
 	public static async Task DeleteWellsAsync(string projectID, string[] wellIDs, CancellationToken token)
@@ -110,5 +118,43 @@ public static class Api
             : await RetryPolicy.ExecuteAsync(() => client.GetProjectWellsAsync(projectID, chosenID: wellChosenIDS, take: wellChosenIDS.Length, cancellationToken: token));
 
         return output.Select(s => new WellID(string.Empty, s.Id));
+    }
+
+    public static async Task<ApiResponse<object>> DeleteProjectsMonthlyProductions(string projectId, string well, CancellationToken token)
+    {
+        var AsynchronousClient = new ApiClient(MyAppContext.Config.ApiUrl);
+        var Configuration = ComboCurve.Api.Client.Configuration.MergeConfigurations(GlobalConfiguration.Instance, new Configuration
+        {
+            BasePath = MyAppContext.Config.ApiUrl
+        });
+
+        var localVarRequestOptions = new RequestOptions();
+
+        string[] _contentTypes = Array.Empty<string>();
+        string[] _accepts = Array.Empty<string>();
+
+        var localVarContentType = ClientUtils.SelectHeaderContentType(_contentTypes);
+        if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+        var localVarAccept = ClientUtils.SelectHeaderAccept(_accepts);
+        if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+        localVarRequestOptions.PathParameters.Add("projectId", ClientUtils.ParameterToString(projectId));
+        localVarRequestOptions.QueryParameters.Add(ClientUtils.ParameterToMultiMap("", "well", well));
+        
+        if (!string.IsNullOrEmpty(Configuration.GetApiKeyWithPrefix("x-api-key")))
+            localVarRequestOptions.HeaderParameters.Add("x-api-key", Configuration.GetApiKeyWithPrefix("x-api-key"));
+
+        if (!string.IsNullOrEmpty(Configuration.AccessToken))
+            localVarRequestOptions.HeaderParameters.Add("Authorization", "Bearer " + Configuration.AccessToken);
+
+        var localVarResponse = await AsynchronousClient.DeleteAsync<object>(
+			"/v1/projects/{projectId}/monthly-productions", 
+			localVarRequestOptions, 
+			Configuration, 
+			token
+		);
+
+        return localVarResponse;
     }
 }

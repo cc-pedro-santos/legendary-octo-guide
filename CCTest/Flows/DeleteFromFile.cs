@@ -52,7 +52,7 @@ public class DeleteFromFile
 		};
 
 		var getId = WellBlocks.GetIdWellBlock(MaxDegreeOfParallelism, projectID, token);
-		var deleteProds = ProductionBlocks.DeleteProductionsBlock(token, MaxDegreeOfParallelism);
+		var deleteProds = ProductionBlocks.DeleteProductionsBlock(projectID, MaxDegreeOfParallelism, token);
 		var deleteWells = WellBlocks.DeleteWellsBlock(projectID, 1, token);
 
 		// Batch

@@ -60,7 +60,7 @@ public class DeleteFromSQL
             new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = MaxDegreeOfParallelism });
 
         // Productions
-        var deleteProd = ProductionBlocks.DeleteProductionsBlock(token, MaxDegreeOfParallelism);
+        var deleteProd = ProductionBlocks.DeleteProductionsBlock(projectID, MaxDegreeOfParallelism, token);
 
         // End Line
         var completionBlock = new ActionBlock<IEnumerable<WellID>>(c =>

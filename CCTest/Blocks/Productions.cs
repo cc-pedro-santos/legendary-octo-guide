@@ -83,14 +83,14 @@ public static class ProductionBlocks
 		});
 
     public static TransformBlock<IEnumerable<WellID>, IEnumerable<WellID>> DeleteProductionsBlock(
-		CancellationToken token, int maxDegreeOfParallelism
+		string projectID, int maxDegreeOfParallelism, CancellationToken token
 	) => new (async wellIDs =>
 		{
 			try
 			{
 				foreach (var item in wellIDs)
 				{
-                    await Api.DeleteProductionAsync(item.wellID, token);
+                    await Api.DeleteProductionAsync(projectID, item.wellID, token);
                     UI.ReportProductionDelete(item.wellID);
                 }                    
 			}
